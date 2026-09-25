@@ -1,10 +1,17 @@
-const Statistics = ({ goodNumber, neutralNumber,badNumber }) => {
+const Statistics = ({ goodNumber, neutralNumber, badNumber }) => {
+  const sum = badNumber + neutralNumber + goodNumber;
+  const calculateAverage = () => (goodNumber - badNumber) / sum;
+  const calculatePositive = () => goodNumber / sum * 100;
+
   return (
     <div>
       <h1>statistics</h1>
       <p>good {goodNumber}</p>
       <p>neutral {neutralNumber}</p>
       <p>bad {badNumber}</p>
+      <p>all {sum}</p>
+      <p>average {calculateAverage()}</p>
+      <p>positive {calculatePositive()}%</p>
     </div>
   )
 }
