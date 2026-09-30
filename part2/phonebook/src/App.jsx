@@ -2,6 +2,8 @@ import { useState } from 'react'
 import Numbers from './components/Numbers'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import axios from 'axios'
+import { useEffect } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -44,6 +46,16 @@ const App = () => {
   const filteredPersons = searchTerm === ""
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(searchTerm))
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
 
   return (
     <div>
