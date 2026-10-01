@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Numbers from './components/Numbers'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import personsService from './services/persons'
 import axios from 'axios'
 import { useEffect } from 'react'
 
@@ -26,6 +27,10 @@ const App = () => {
       number: newNumber,
     }
 
+    personsService
+      .create(newPerson)
+      .then(personData => alert(`${personData.name} added to phonebook`))
+
     setPersons(persons.concat(newPerson))
     setNewName('')
     setNewNumber('')
@@ -48,13 +53,9 @@ const App = () => {
     : persons.filter(person => person.name.toLowerCase().includes(searchTerm))
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personsService
+      .getAll()
+      .then(personsData => setPersons(personsData))
   }, [])
 
   return (
