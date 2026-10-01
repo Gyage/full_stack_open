@@ -13,26 +13,16 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
 
-  const addName = event => {
+  const handleSubmit = event => {
     event.preventDefault()
 
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return;
-    }
+    const personWithThisName = persons.find(person => person.name === newName)
 
-    const newPerson = {
-      name: newName,
-      number: newNumber,
+    if (personWithThisName) {
+      handleExistingPerson(newName, newNumber, personWithThisName)
+    } else {
+      handleCreate(newName, newNumber)
     }
-
-    personsService
-      .create(newPerson)
-      .then(personData => {
-        alert(`${personData.name} added to phonebook`)
-        newPerson.id = personData.id
-        setPersons(persons.concat(newPerson))
-      })
 
     setNewName('')
     setNewNumber('')
@@ -54,8 +44,36 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personsService
         .remove(person.id)
-        .then(data => setPersons(persons.filter(existingPerson => existingPerson.id !== person.id)))
+        .then(() => setPersons(persons.filter(existingPerson => existingPerson.id !== person.id)))
     }
+  }
+
+  const handleExistingPerson = (name, newNumber, personWithThisName) => {
+    if (!window.confirm(`${name} is already added to phonebook, replace the old number with the new one?`)) {
+      return;
+    }
+    const newPerson = { ...personWithThisName, number: newNumber }
+
+    personsService
+      .update(personWithThisName.id, newPerson)
+      .then(personData => {
+        setPersons(persons.map(person => person.id === personData.id ? personData : person))
+      })
+  }
+
+  const handleCreate = (newName, newNumber) => {
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+    }
+
+    personsService
+      .create(newPerson)
+      .then(personData => {
+        alert(`${personData.name} added to phonebook`)
+        newPerson.id = personData.id
+        setPersons(persons.concat(newPerson))
+      })
   }
 
   const filteredPersons = searchTerm === ""
@@ -76,7 +94,7 @@ const App = () => {
       <PersonForm
         newName={newName} 
         newNumber={newNumber} 
-        addName={addName} 
+        handleSubmit={handleSubmit} 
         handleNameChange={handleNameChange} 
         handleNumberChange={handleNumberChange} 
       />
