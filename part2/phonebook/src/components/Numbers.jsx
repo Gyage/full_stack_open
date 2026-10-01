@@ -1,8 +1,8 @@
 import Number from "./Number"
 
-const Numbers = ({ persons }) => {
+const Numbers = ({ persons, handleDelete }) => {
   const numbers = persons.map(person =>
-    <Number key={person.name} person={person} />
+    <Number key={person.name} person={person} onDeleteClick={() => handleDelete(person)} />
   )
 
   return (

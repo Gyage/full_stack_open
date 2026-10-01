@@ -25,4 +25,4 @@ const remove = id => {
     .then(response => response.data)
 }
 
-export default { getAll, create, update }
+export default { getAll, create, update, remove }

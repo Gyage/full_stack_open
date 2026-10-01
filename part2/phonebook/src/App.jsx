@@ -3,7 +3,6 @@ import Numbers from './components/Numbers'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personsService from './services/persons'
-import axios from 'axios'
 import { useEffect } from 'react'
 
 const App = () => {
@@ -14,7 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
 
-  const addName = (event) => {
+  const addName = event => {
     event.preventDefault()
 
     if (persons.some(person => person.name === newName)) {
@@ -29,23 +28,34 @@ const App = () => {
 
     personsService
       .create(newPerson)
-      .then(personData => alert(`${personData.name} added to phonebook`))
+      .then(personData => {
+        alert(`${personData.name} added to phonebook`)
+        newPerson.id = personData.id
+        setPersons(persons.concat(newPerson))
+      })
 
-    setPersons(persons.concat(newPerson))
     setNewName('')
     setNewNumber('')
   }
 
-  const handleNameChange = (event) => {
+  const handleNameChange = event => {
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) => {
+  const handleNumberChange = event => {
     setNewNumber(event.target.value)
   }
 
-  const handleSearchTermChange = (event) => {
+  const handleSearchTermChange = event => {
     setSearchTerm(event.target.value)
+  }
+
+  const handleDelete = person => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsService
+        .remove(person.id)
+        .then(data => setPersons(persons.filter(existingPerson => existingPerson.id !== person.id)))
+    }
   }
 
   const filteredPersons = searchTerm === ""
@@ -70,7 +80,10 @@ const App = () => {
         handleNameChange={handleNameChange} 
         handleNumberChange={handleNumberChange} 
       />
-      <Numbers persons={filteredPersons} />
+      <Numbers 
+        persons={filteredPersons} 
+        handleDelete={handleDelete}
+      />
     </div>
   )
 }
