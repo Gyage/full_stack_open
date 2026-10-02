@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personsService from './services/persons'
 import { useEffect } from 'react'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -12,6 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [message, setMessage] = useState(null)
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -58,6 +60,10 @@ const App = () => {
       .update(personWithThisName.id, newPerson)
       .then(personData => {
         setPersons(persons.map(person => person.id === personData.id ? personData : person))
+        setMessage(`${personData.name}'s number changed to ${newNumber}"`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
   }
 
@@ -70,7 +76,10 @@ const App = () => {
     personsService
       .create(newPerson)
       .then(personData => {
-        alert(`${personData.name} added to phonebook`)
+        setMessage(`${personData.name} added to phonebook`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         newPerson.id = personData.id
         setPersons(persons.concat(newPerson))
       })
@@ -89,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter searchTerm={searchTerm} handleFilterChange={handleSearchTermChange} />
       <h3>Add a new</h3>
       <PersonForm
