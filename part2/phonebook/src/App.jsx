@@ -14,6 +14,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [message, setMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -60,10 +61,19 @@ const App = () => {
       .update(personWithThisName.id, newPerson)
       .then(personData => {
         setPersons(persons.map(person => person.id === personData.id ? personData : person))
+        setIsError(false)
         setMessage(`${personData.name}'s number changed to ${newNumber}"`)
         setTimeout(() => {
           setMessage(null)
         }, 5000)
+      })
+      .catch(error => {
+        setIsError(true)
+        setMessage(`Information of ${name} has already been removed from server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setPersons(persons.filter(existingPerson => existingPerson.id !== personWithThisName.id))
       })
   }
 
@@ -76,6 +86,7 @@ const App = () => {
     personsService
       .create(newPerson)
       .then(personData => {
+        setIsError(false)
         setMessage(`${personData.name} added to phonebook`)
         setTimeout(() => {
           setMessage(null)
@@ -98,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} isError={isError} />
       <Filter searchTerm={searchTerm} handleFilterChange={handleSearchTermChange} />
       <h3>Add a new</h3>
       <PersonForm
