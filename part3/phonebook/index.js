@@ -24,6 +24,8 @@ let persons = [
     }
 ]
 
+app.use(express.json())
+
 app.get('/info', (request, response) => {
   response.send(`
     <div>Phonebook has info of ${persons.length} people</div>
@@ -57,6 +59,29 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   response.json(persons)
+})
+
+app.post('/api/persons', (request, response) => {
+  const name = request.body.name
+  const number = request.body.number
+
+  if (!name || !number) {
+    response.status(400).json({error: 'the person must have a name and a number'})
+  }
+
+  if (persons.find(person => person.name === name)) {
+    response.status(400).json({error: 'the name must be unique'})
+  }
+
+  const person ={
+    name,
+    number,
+    id: Math.floor(Math.random() * 9999) 
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 const PORT = 3001
