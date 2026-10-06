@@ -33,13 +33,26 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const note = persons.find(note => note.id === id)
+  const person = persons.find(person => person.id === id)
 
-  if (!note) {
+  if (!person) {
     response.status(404).end()
   }
 
-  response.json(note)
+  response.json(person)
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const person = persons.find(person => person.id === id)
+
+  if (!person) {
+    response.status(404).end()
+  }
+
+  persons = persons.filter(person => person.id !== id)
+
+  response.status(204).end()
 })
 
 app.get('/api/persons', (request, response) => {
