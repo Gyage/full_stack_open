@@ -24,8 +24,11 @@ let persons = [
     }
 ]
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+app.get('/info', (request, response) => {
+  response.send(`
+    <div>Phonebook has info of ${persons.length} people</div>
+    <div>${new Date()}</div>
+    `)
 })
 
 app.get('/api/persons/:id', (request, response) => {
