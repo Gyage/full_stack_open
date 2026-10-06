@@ -1,4 +1,6 @@
 const express = require('express')
+const cors = require('cors')
+var morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -25,6 +27,12 @@ let persons = [
 ]
 
 app.use(express.json())
+app.use(cors())
+
+morgan.token('body', function (req, res) { 
+  return JSON.stringify(req.body) 
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body')) 
 
 app.get('/info', (request, response) => {
   response.send(`
@@ -66,11 +74,11 @@ app.post('/api/persons', (request, response) => {
   const number = request.body.number
 
   if (!name || !number) {
-    response.status(400).json({error: 'the person must have a name and a number'})
+    return response.status(400).json({error: 'the person must have a name and a number'})
   }
 
   if (persons.find(person => person.name === name)) {
-    response.status(400).json({error: 'the name must be unique'})
+    return response.status(400).json({error: 'the name must be unique'})
   }
 
   const person ={
@@ -84,6 +92,6 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
