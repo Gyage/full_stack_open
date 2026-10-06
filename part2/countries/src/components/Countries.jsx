@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import weatherSevice from "../services/Weather";
+
 const Countries = ({ countries, handleClick }) => {
+  const [weather, setWeather] = useState(null)
+
+  useEffect(() => {
+    if (!countries || countries.length !== 1) {
+      return
+    }
+    weatherSevice
+      .getWeatherForCity(countries[0].name.common)
+      .then(data => setWeather(data))
+      .catch(response => console.log(response));
+    }, [countries])
+
   if (countries === null || countries.length === 0 || countries.length > 10) {
     return (
       <div>
@@ -18,6 +33,14 @@ const Countries = ({ countries, handleClick }) => {
     const country = countries[0]
     const languages = Object.keys(country.languages).map((key) => country.languages[key])
     const languageList = languages.map((language, index) => <li key={index}>{language}</li>)
+    const weatherElement = weather 
+      ? <>
+          <h2>Weather in {country.capital[0]}</h2>
+          <p>Temperature: {weather.main.temp} Celsius</p>
+          <img src={`https://openweathermap.org/payload/api/media/file/${weather.weather[0].icon}.png`} />
+          <p>Wind: {weather.wind.speed} m/s</p>
+        </>
+      : null
 
     return (
       <>
@@ -32,6 +55,7 @@ const Countries = ({ countries, handleClick }) => {
           src={country.flags.png} 
           width={100}
           height={100} />
+        {weatherElement}
       </>
     )
   }
