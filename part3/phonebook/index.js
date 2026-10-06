@@ -28,12 +28,17 @@ app.get('/info', (request, response) => {
   response.send(`
     <div>Phonebook has info of ${persons.length} people</div>
     <div>${new Date()}</div>
-    `)
+  `)
 })
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const note = notes.find(note => note.id === id)
+  const note = persons.find(note => note.id === id)
+
+  if (!note) {
+    response.status(404).end()
+  }
+
   response.json(note)
 })
 
