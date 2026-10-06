@@ -1,0 +1,1 @@
+In this project I will present my solutions to the Full Stack Open course's exercises.
