@@ -1,4 +1,4 @@
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleClick }) => {
   if (countries === null || countries.length === 0 || countries.length > 10) {
     return (
       <div>
@@ -6,7 +6,12 @@ const Countries = ({ countries }) => {
       </div>
     )
   } else if (countries.length > 1) {
-    const countryNames = countries.map(country => <p key={country.cca3}>{country.name.common}</p>)
+    const countryNames = countries.map(country => 
+      <div key={country.cca3}>
+        {country.name.common}
+        <button onClick={() => handleClick(country.name.common)}>Show</button>
+      </div>
+    )
 
     return (countryNames)
   } else {
@@ -20,7 +25,9 @@ const Countries = ({ countries }) => {
         <p>Capital {country.capital[0]}</p>
         <p>Area {country.area}</p>
         <h2>Languages</h2>
-        {languageList}
+        <ul>
+          {languageList}
+        </ul>
         <img 
           src={country.flags.png} 
           width={100}

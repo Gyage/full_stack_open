@@ -7,15 +7,25 @@ const App = () => {
   const [countries, setCountries] = useState(null)
   const [selectedCountries, setSelectedCountries] = useState(null)
 
-  const onSearchChange = event => {
+  const onSearchChange = event =>
     setSelectedCountries(countries.filter(country =>
       country.name.common.toLowerCase().includes(event.target.value)
         ? country
         : null
     ))
-  }
+
+
+  const onShowCountry = name =>
+    setSelectedCountries(countries.filter(country =>
+      country.name.common.includes(name)
+        ? country
+        : null
+    ))
+  
 
   useEffect(() => { 
+    //note: this is wasteful, but I couldn't find an endpoint that lets you search without the full name
+    // So I load all of them at the start
     countriesSevice
       .getAll()
       .then(data => setCountries(data))
@@ -26,7 +36,7 @@ const App = () => {
       <div>
         find countries<input onChange={onSearchChange}/>
       </div>
-      <Countries countries={selectedCountries} />
+      <Countries countries={selectedCountries} handleClick={onShowCountry} />
     </>
   )
 }
