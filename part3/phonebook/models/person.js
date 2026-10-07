@@ -32,4 +32,8 @@ personSchema.static('getAll', function () {
   return this.find({})
 })
 
+personSchema.static('create', function (data) {
+  return (new this(data)).save()
+})
+
 module.exports = mongoose.model('Person', personSchema)
