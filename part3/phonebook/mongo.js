@@ -24,19 +24,19 @@ if (process.argv.length < 5) {
   Person
     .find({})
     .then(people => {
-        let output = ['phonebook:', ... people.map(person => `${person.name} ${person.number}`)]
-        console.log(output.join('\n\r'))
-        mongoose.connection.close()
-        process.exit(1)
+      let output = ['phonebook:', ... people.map(person => `${person.name} ${person.number}`)]
+      console.log(output.join('\n\r'))
+      mongoose.connection.close()
+      process.exit(1)
     })
 } else {
-    const person = new Person({
+  const person = new Person({
     name: process.argv[3],
     number: process.argv[4],
-    })
+  })
 
-    person.save().then(result => {
+  person.save().then(() => {
     console.log(`added ${person.name} number ${person.number} to phonebook`)
     mongoose.connection.close()
-    })
+  })
 }

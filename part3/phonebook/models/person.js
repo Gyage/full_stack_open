@@ -8,7 +8,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 mongoose.connect(url, { family: 4 })
 
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -24,15 +24,15 @@ const personSchema = new mongoose.Schema({
 })
 
 personSchema.path('number').validate(function(value) {
-  return value.length > 7;
-}, 'The number must be at least 8 characters long');
+  return value.length > 7
+}, 'The number must be at least 8 characters long')
 
 personSchema.path('number').validate(function(value) {
-  const parts = value.split("-")
-  return parts.length > 1 
+  const parts = value.split('-')
+  return parts.length > 1
     && /^\d{2,3}$/.test(parts[0])
     && /^\d+$/.test(parts[1])
-}, 'The number must be formed of two parts that are separated by -, the first part has two or three numbers and the second part also consists of numbers');
+}, 'The number must be formed of two parts that are separated by -, the first part has two or three numbers and the second part also consists of numbers')
 
 
 personSchema.static('getAll', function () {

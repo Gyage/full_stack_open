@@ -7,10 +7,10 @@ const Person = require('./models/person')
 app.use(express.json())
 app.use(express.static('dist'))
 
-morgan.token('body', function (req, res) { 
-  return JSON.stringify(req.body) 
+morgan.token('body', function (req) {
+  return JSON.stringify(req.body)
 })
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body')) 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/info', (request, response) => {
   Person
@@ -40,7 +40,7 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person
     .findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -57,10 +57,10 @@ app.post('/api/persons', (request, response, next) => {
   const number = request.body.number
 
   if (!name || !number) {
-    return response.status(400).json({error: 'the person must have a name and a number'})
+    return response.status(400).json({ error: 'the person must have a name and a number' })
   }
 
-  (Person.create({name, number}))
+  (Person.create({ name, number }))
     .then(savedPerson => {
       response.json(savedPerson)
     })
@@ -72,7 +72,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   const number = request.body.number
 
   if (!name || !number) {
-    return response.status(400).json({error: 'the person must have a name and a number'})
+    return response.status(400).json({ error: 'the person must have a name and a number' })
   }
 
   Person.findById(request.params.id)
@@ -95,8 +95,8 @@ const errorHandler = (error, request, response, next) => {
   console.log(error.message)
 
   if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })  
-    }
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }
