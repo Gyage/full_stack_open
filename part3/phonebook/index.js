@@ -36,21 +36,28 @@ morgan.token('body', function (req, res) {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body')) 
 
 app.get('/info', (request, response) => {
-  response.send(`
-    <div>Phonebook has info of ${persons.length} people</div>
-    <div>${new Date()}</div>
-  `)
+  Person
+    .countDocuments()
+    .then(count => {
+      response.send(`
+        <div>Phonebook has info of ${count} people</div>
+        <div>${new Date()}</div>
+      `)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const person = persons.find(person => person.id === id)
 
-  if (!person) {
-    response.status(404).end()
-  }
+  Person
+    .findById(id)
+    .then(person => {
+      if (!person) {
+        response.status(404).end()
+      }
 
-  response.json(person)
+      response.json(person)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
