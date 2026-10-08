@@ -62,7 +62,7 @@ const App = () => {
       .then(personData => {
         setPersons(persons.map(person => person.id === personData.id ? personData : person))
 
-        displayNotificaction(false, `${personData.name}'s number changed to ${newNumber}"`)
+        displayNotificaction(false, `${personData.name}'s number changed to ${newNumber}`)
       })
       .catch(error => {
         displayNotificaction(true, error.response.data.error)
