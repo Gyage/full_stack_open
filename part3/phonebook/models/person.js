@@ -16,7 +16,10 @@ mongoose.connect(url, { family: 4 })
   })
 
 const personSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    minLength: 3
+  },
   number: String,
 })
 
@@ -33,7 +36,7 @@ personSchema.static('getAll', function () {
 })
 
 personSchema.static('create', function (data) {
-  return (new this(data)).save()
+  return (new this(data)).save({ runValidators: true })
 })
 
 module.exports = mongoose.model('Person', personSchema)
