@@ -66,3 +66,35 @@ describe('favorites', () => {
         assert.deepStrictEqual(result, blogs[0])
     })
 })
+
+describe('most blogs', () => {
+    test('empty list', () => {
+        const blogs = []
+
+        const result = listHelper.mostBlogs(blogs)
+        assert.notStrictEqual(result, {author: null, blogs: null})
+    })
+
+    test('filled list', () => {
+        const blogs = [
+            {
+                author: "bla",
+                name: "blog1",
+                likes: 5
+            },
+            {
+                author: "bla",
+                name: "blogOne",
+                likes: 3
+            },
+            {
+                author: "blabla",
+                name: "blogOther",
+                likes: 2
+            },
+        ]
+
+        const result = listHelper.mostBlogs(blogs)
+        assert.notStrictEqual(result, {author: "bla", blogs: 2})
+    })
+})
