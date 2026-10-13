@@ -28,6 +28,25 @@ test('blogs are identified with "id"', async () => {
   assert('id' in response.body[0])
 })
 
+test('new blog inserted', async () => {
+  const newBlog = {
+    title: 'New blog',
+    author: 'ME',
+    url: 'localhost:3000',
+    likes: 3
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const blogs = await helper.blogsInDb()
+  delete blogs[blogs.length - 1].id
+
+  assert.deepStrictEqual(newBlog, blogs[blogs.length - 1])
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
