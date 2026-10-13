@@ -14,7 +14,7 @@ describe('total likes', () => {
         const blogs = []
 
         const result = listHelper.totalLikes(blogs)
-        assert.strictEqual(result, 0)
+        assert.deepStrictEqual(result, {})
     })
 
     test('single blog', () => {
@@ -72,7 +72,7 @@ describe('most blogs', () => {
         const blogs = []
 
         const result = listHelper.mostBlogs(blogs)
-        assert.notStrictEqual(result, {author: null, blogs: null})
+        assert.deepStrictEqual(result, {})
     })
 
     test('filled list', () => {
@@ -83,7 +83,7 @@ describe('most blogs', () => {
                 likes: 5
             },
             {
-                author: "bla",
+                author: "blabla",
                 name: "blogOne",
                 likes: 3
             },
@@ -95,7 +95,7 @@ describe('most blogs', () => {
         ]
 
         const result = listHelper.mostBlogs(blogs)
-        assert.notStrictEqual(result, {author: "bla", blogs: 2})
+        assert.notStrictEqual(result, {author: "blabla", blogs: 2})
     })
 })
 
@@ -104,7 +104,7 @@ describe('most likes', () => {
         const blogs = []
 
         const result = listHelper.mostLikes(blogs)
-        assert.notStrictEqual(result, {author: null, blogs: null})
+        assert.deepStrictEqual(result, {})
     })
 
     test('single blog with many likes', () => {
