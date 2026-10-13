@@ -65,6 +65,32 @@ test('new blog default likes 0', async () => {
   assert.strictEqual(0, blogs[blogs.length - 1]['likes'])
 })
 
+test('new blog missing title', async () => {
+  const newBlog = {
+    author: 'ME',
+    url: 'localhost:3000',
+    likes: 1,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('new blog missing url', async () => {
+  const newBlog = {
+    title: 'New blog',
+    author: 'ME',
+    likes: 1,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
