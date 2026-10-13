@@ -91,6 +91,18 @@ test('new blog missing url', async () => {
     .expect(400)
 })
 
+test('delete blog', async () => {
+  let blogs = await helper.blogsInDb()
+
+  await api
+    .delete(`/api/blogs/${blogs[0].id}`)
+    .expect(204)
+
+  blogs = await helper.blogsInDb()
+
+  assert.strictEqual(blogs.length, helper.initialBlogs.length - 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
