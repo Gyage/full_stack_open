@@ -47,6 +47,24 @@ test('new blog inserted', async () => {
   assert.deepStrictEqual(newBlog, blogs[blogs.length - 1])
 })
 
+test('new blog default likes 0', async () => {
+  const newBlog = {
+    title: 'New blog',
+    author: 'ME',
+    url: 'localhost:3000',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const blogs = await helper.blogsInDb()
+  delete blogs[blogs.length - 1].id
+
+  assert.strictEqual(0, blogs[blogs.length - 1]['likes'])
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
