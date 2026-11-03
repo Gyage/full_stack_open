@@ -20,12 +20,12 @@ const initialUsers = [
   {
     username: 'JonnieX',
     name: 'John',
-    password: 'xy.zy',
+    password: '$2b$10$jUbwiclcYqTkB.xYLe6xc.pDJRR3qACHW7Z8cGKPv0I/x2/e4rk8C',  //password
   },
   {
     username: 'MrME',
     name: 'ME',
-    password: 'localhost',
+    password: '$2b$10$jUbwiclcYqTkB.xYLe6xc.pDJRR3qACHW7Z8cGKPv0I/x2/e4rk8C',
   },
 ]
 
